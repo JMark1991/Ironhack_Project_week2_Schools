@@ -1,5 +1,3 @@
-# Ironhack_Project_week2_Schools
-
 # Week 2 Project
 You were hired by Ironhack to perform an Analytics Consulting Project entitled: competitive landscape.
 
