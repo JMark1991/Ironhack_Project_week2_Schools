@@ -9,7 +9,6 @@ schools = {
 
 import re
 import pandas as pd
-from pandas.io.json import json_normalize
 import requests
 
 
@@ -42,7 +41,7 @@ def get_school_info(school, school_id):
     courses_df = pd.DataFrame(courses, columns= ['courses'])
 
     locations = data['content']['locations']
-    locations_df = json_normalize(locations)
+    locations_df = pd.json_normalize(locations)
 
     badges_df = pd.DataFrame(data['content']['meritBadges'])
 
@@ -73,3 +72,4 @@ for school, id in schools.items():
     courses_list.append(b)
     badges_list.append(c)
     schools_list.append(d)
+
