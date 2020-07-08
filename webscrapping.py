@@ -32,34 +32,34 @@ def get_comments_school(school):
 
 
 def get_school_info(school, school_id):
-    url = 'https://www.switchup.org/chimera/v1/bootcamp-data?mainTemplate=bootcamp-data%2Fdescription&path=%2Fbootcamps%2F'+ str(school) + '&isDataTarget=false&bootcampId='+ str(school_id) + '&logoTag=logo&truncationLength=250&readMoreOmission=...&readMoreText=Read%20More&readLessText=Read%20Less'
+  url = 'https://www.switchup.org/chimera/v1/bootcamp-data?mainTemplate=bootcamp-data%2Fdescription&path=%2Fbootcamps%2F'+ str(school) + '&isDataTarget=false&bootcampId='+ str(school_id) + '&logoTag=logo&truncationLength=250&readMoreOmission=...&readMoreText=Read%20More&readLessText=Read%20Less'
 
-    data = requests.get(url).json()
+  data = requests.get(url).json()
 
-    data.keys()
+  data.keys()
 
-    courses = data['content']['courses']
-    courses_df = pd.DataFrame(courses, columns= ['courses'])
+  courses = data['content']['courses']
+  courses_df = pd.DataFrame(courses, columns= ['courses'])
 
-    locations = data['content']['locations']
-    locations_df = json_normalize(locations)
+  locations = data['content']['locations']
+  locations_df = pd.json_normalize(locations)
 
-    badges_df = pd.DataFrame(data['content']['meritBadges'])
+  badges_df = pd.DataFrame(data['content']['meritBadges'])
 
-    website = data['content']['webaddr']
-    description = data['content']['description']
-    logoUrl = data['content']['logoUrl']
-    school_df = pd.DataFrame([website,description,logoUrl]).T
-    school_df.columns =  ['website','description','LogoUrl']
+  website = data['content']['webaddr']
+  description = data['content']['description']
+  logoUrl = data['content']['logoUrl']
+  school_df = pd.DataFrame([website,description,logoUrl]).T
+  school_df.columns =  ['website','description','LogoUrl']
 
-    locations_df['school'] = school
-    courses_df['school'] = school
-    badges_df['school'] = school
-    school_df['school'] = school
+  locations_df['school'] = school
+  courses_df['school'] = school
+  badges_df['school'] = school
+  school_df['school'] = school
 
-    # how could you write a similar block of code to the above in order to record the school ID?
+  # how could you write a similar block of code to the above in order to record the school ID?
 
-    return locations_df, courses_df, badges_df, school_df
+  return locations_df, courses_df, badges_df, school_df
 
 def table_to_sql(df, conn, table):
     df.to_sql(table, conn, if_exists = 'replace', index = False)
@@ -69,15 +69,26 @@ cnx = mysql.connector.connect(user = 'root',password = password, host ='localhos
 
 print(cnx.is_connected())
 
+reviews_list = []
 locations_list = []
 courses_list = []
 badges_list = []
 schools_list = []
 
 for school, id in schools.items():
-    print(school)
-    a,b,c,d = get_school_info(school,id)
-    locations_list.append(a)
-    courses_list.append(b)
-    badges_list.append(c)
-    schools_list.append(d)
+  print(school)
+  a,b,c,d = get_school_info(school,id)
+  locations_list.append(a)
+  courses_list.append(b)
+  badges_list.append(c)
+  schools_list.append(d)
+  reviews_list.append(get_comments_school(school))
+
+
+print(
+'\n\nLocations: \n', locations_list[0].columns,
+'\n\nCourses: \n', courses_list[0].columns,
+'\n\nBadges: \n', badges_list[0].columns,
+'\n\nSchools: \n', schools_list[0].columns,
+'\n\nReviews: \n', reviews_list[0].columns
+)
