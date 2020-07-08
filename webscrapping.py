@@ -9,7 +9,7 @@ schools = {
 
 import re
 import pandas as pd
-from pandas.io.json import json_normalize
+#from pandas.io.json import json_normalize
 import requests
 import mysql.connector
 from getpass import getpass
@@ -60,6 +60,7 @@ def get_school_info(school, school_id):
   # how could you write a similar block of code to the above in order to record the school ID?
 
   return locations_df, courses_df, badges_df, school_df
+
 
 # SQL Python link code
 # Table to export table to database
@@ -163,9 +164,6 @@ courses_list = []
 badges_list = []
 schools_list = []
 
-#create dataframes
-
-
 
 for school, id in schools.items():
   print(school)
@@ -177,38 +175,11 @@ for school, id in schools.items():
   e = get_comments_school(school)
   reviews_list.append(e)
 
-
-'''
-print(
-<<<<<<< HEAD
-'\n\nLocations: \n', locations_col_set,
-'\n\nCourses: \n', courses_col_set,
-'\n\nBadges: \n', badges_col_set,
-'\n\nSchools: \n', schools_col_set,
-'\n\nReviews: \n', reviews_col_set
-)'''
-=======
-'\n\nLocations: \n', locations_list[0].columns,
-'\n\nCourses: \n', courses_list[0].columns,
-'\n\nBadges: \n', badges_list[0].columns,
-'\n\nSchools: \n', schools_list[0].columns,
-'\n\nReviews: \n', reviews_list[0].columns
-)
+reviews = pd.concat(reviews_list)
+locations = pd.concat(locations_list)
+courses = pd.concat(courses_list)
+badges = pd.concat(badges_list)
+schools = pd.concat(schools_list)
 
 
-
-
-
-for n in range(3):
-    print('NOVA ESCOLAAAAAAAAAAAAAAA')
-    print('\n\n')
-    print(schools_list[n])
-    print('\n\n')
-    print(reviews_list[n])
-    print('\n\n')
-    print(locations_list[n])
-    print('\n\n')
-    print(badges_list[n])
-    print('\n\n')
-    print(courses_list[n])
->>>>>>> f69dbfb79b5ed9a3e585cae4edb6a6340a5a50e0
+print(reviews.head(), locations.head(), courses.head(), badges.head(), schools.head())
