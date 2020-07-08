@@ -77,11 +77,7 @@ schools_list = []
 
 #create dataframes
 
-locations_col_set = pd.Series(dtype=str)
-reviews_col_set = pd.Series(dtype=str)
-courses_col_set = pd.Series(dtype=str)
-badges_col_set = pd.Series(dtype=str)
-schools_col_set = pd.Series(dtype=str)
+
 
 for school, id in schools.items():
   print(school)
@@ -93,19 +89,12 @@ for school, id in schools.items():
   e = get_comments_school(school)
   reviews_list.append(e)
 
-for n in range(3):
-  locations_col_set += locations_list[n].columns
-  reviews_col_set += reviews_list[n].columns
-  courses_col_set += courses_list[n].columns
-  badges_col_set += badges_list[n].columns
-  schools_col_set += schools_list[n].columns
 
-#print(locations_df)
-
+'''
 print(
 '\n\nLocations: \n', locations_col_set,
 '\n\nCourses: \n', courses_col_set,
 '\n\nBadges: \n', badges_col_set,
 '\n\nSchools: \n', schools_col_set,
 '\n\nReviews: \n', reviews_col_set
-)
+)'''
