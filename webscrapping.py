@@ -12,7 +12,7 @@ import pandas as pd
 from pandas.io.json import json_normalize
 import requests
 import mysql.connector
-
+from getpass import getpass
 
 def get_comments_school(school):
   TAG_RE = re.compile(r'<[^>]+>')
@@ -64,7 +64,7 @@ def get_school_info(school, school_id):
 def table_to_sql(df, conn, table):
     df.to_sql(table, conn, if_exists = 'replace', index = False)
 
-password = input('Please write your localhost root password:\n')
+password = getpass('Please write your localhost root password:\n')
 cnx = mysql.connector.connect(user = 'root',password = password, host ='localhost', database = 'competitive_landscape')
 
 print(cnx.is_connected())
