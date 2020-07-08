@@ -61,12 +61,12 @@ def get_school_info(school, school_id):
   return locations_df, courses_df, badges_df, school_df
 
 
+# Save the webscraping to lists
 reviews_list = []
 locations_list = []
 courses_list = []
 badges_list = []
 schools_list = []
-
 
 for school, id in schools.items():
   print(school)
@@ -88,11 +88,22 @@ python_to_sql.create_sql_tables(cursor)
 python_to_sql.commit_and_close_sql(cursor, cnx)
 
 
-reviews = pd.concat(reviews_list)
-locations = pd.concat(locations_list)
-courses = pd.concat(courses_list)
-badges = pd.concat(badges_list)
-schools = pd.concat(schools_list)
+# Move the data to dataframes
+reviews_df = pd.concat(reviews_list)
+locations_df = pd.concat(locations_list)
+courses_df = pd.concat(courses_list)
+badges_df = pd.concat(badges_list)
+schools_df = pd.concat(schools_list)
 
 
-print(reviews.head(), locations.head(), courses.head(), badges.head(), schools.head())
+#DATA CLEANING
+
+# Removing the . from the table location column names
+locations_df.rename(columns={col : col.replace('.','_') for col in locations_df.columns}, inplace=True)
+
+
+#print(reviews_df.head())
+print(locations_df.head())
+#print(courses_df.head())
+#print(badges_df.head())
+#print(schools_df.head())
