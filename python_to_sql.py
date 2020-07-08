@@ -92,16 +92,40 @@ def create_sql_tables(cursor):
     cursor.execute(q_reviews)
     cursor.execute(q_courses)
 
-
+def print_to_sql_tables(cursor,reviews_df,locations_df,courses_df,badges_df,schools_df):
     # Insert rows on tables from dataframes
+    # Table Reviews
+    q_reviews = ''
+    for row in reviews_df:
+        q_reviews = "INSERT INTO competitive_landscape.reviews("
+        "id,"
+        "name,"
+        "anonymous,"
+        "hostProgramName,"
+        "graduatingYear Date,"
+        "isAlumni,"
+        "jobTitle,"
+        "tagline,"
+        "body,"
+        "createdAt Date,"
+        "queryDate Date,"
+        "program,"
+        "user,"
+        "overallScore,"
+        "comments,"
+        "overall,"
+        "curriculum,"
+        "jobSupport,"
+        "review_body,"
+        "school)" + "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);"
+    cursor.execute(q_reviews, ('XXX','XXX','XXX','XXX','XXX','XXX','XXX','XXX','XXX','XXX','XXX','XXX','XXX','XXX','XXX','XXX','XXX','XXX','XXX','XXX'))
+    print()
 
-    # for row in actor_df:
-    #     query = "INSERT INTO labs.students(student_id, student_name, coolness)"
-    #              + "VALUES ("row[id], "Jose Pereira",  10);"
-    #
-
-def commit_and_close_sql(cursor, cnx):
+def commit_sql(cursor, cnx):
     # Commits everything to SQL database and closes connections
     cnx.commit()
+
+
+def close_sql(cursor,cnx):
     cursor.close()
     cnx.close()

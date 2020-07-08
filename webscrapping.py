@@ -84,8 +84,8 @@ cursor, cnx = python_to_sql.connect_to_sql()
 # Create sql tables
 python_to_sql.create_sql_tables(cursor)
 
-# Commit and close SQL connection
-python_to_sql.commit_and_close_sql(cursor, cnx)
+# Commit SQL connection
+python_to_sql.commit_sql(cursor, cnx)
 
 
 reviews = pd.concat(reviews_list)
@@ -94,5 +94,10 @@ courses = pd.concat(courses_list)
 badges = pd.concat(badges_list)
 schools = pd.concat(schools_list)
 
+python_to_sql.print_to_sql_tables(cursor, reviews,locations,courses,badges,schools)
 
-print(reviews.head(), locations.head(), courses.head(), badges.head(), schools.head())
+python_to_sql.commit_sql(cursor, cnx)
+
+python_to_sql.close_sql(cursor, cnx)
+
+#print(reviews.head(), locations.head(), courses.head(), badges.head(), schools.head())
