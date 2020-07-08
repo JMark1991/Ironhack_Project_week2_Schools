@@ -75,6 +75,14 @@ courses_list = []
 badges_list = []
 schools_list = []
 
+#create dataframes
+
+locations_col_set = pd.Series(dtype=str)
+reviews_col_set = pd.Series(dtype=str)
+courses_col_set = pd.Series(dtype=str)
+badges_col_set = pd.Series(dtype=str)
+schools_col_set = pd.Series(dtype=str)
+
 for school, id in schools.items():
   print(school)
   a,b,c,d = get_school_info(school,id)
@@ -82,13 +90,22 @@ for school, id in schools.items():
   courses_list.append(b)
   badges_list.append(c)
   schools_list.append(d)
-  reviews_list.append(get_comments_school(school))
+  e = get_comments_school(school)
+  reviews_list.append(e)
 
+for n in range(3):
+  locations_col_set += locations_list[n].columns
+  reviews_col_set += reviews_list[n].columns
+  courses_col_set += courses_list[n].columns
+  badges_col_set += badges_list[n].columns
+  schools_col_set += schools_list[n].columns
+
+#print(locations_df)
 
 print(
-'\n\nLocations: \n', locations_list[0].columns,
-'\n\nCourses: \n', courses_list[0].columns,
-'\n\nBadges: \n', badges_list[0].columns,
-'\n\nSchools: \n', schools_list[0].columns,
-'\n\nReviews: \n', reviews_list[0].columns
+'\n\nLocations: \n', locations_col_set,
+'\n\nCourses: \n', courses_col_set,
+'\n\nBadges: \n', badges_col_set,
+'\n\nSchools: \n', schools_col_set,
+'\n\nReviews: \n', reviews_col_set
 )
