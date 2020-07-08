@@ -93,33 +93,35 @@ def create_sql_tables(cursor):
     cursor.execute(q_courses)
 
 def print_to_sql_tables(cursor,reviews_df,locations_df,courses_df,badges_df,schools_df):
+
     # Insert rows on tables from dataframes
     # Table Reviews
     q_reviews = ''
-    for row in reviews_df:
-        q_reviews = "INSERT INTO competitive_landscape.reviews("
-        "id,"
-        "name,"
-        "anonymous,"
-        "hostProgramName,"
-        "graduatingYear Date,"
-        "isAlumni,"
-        "jobTitle,"
-        "tagline,"
-        "body,"
-        "createdAt Date,"
-        "queryDate Date,"
-        "program,"
-        "user,"
-        "overallScore,"
-        "comments,"
-        "overall,"
-        "curriculum,"
-        "jobSupport,"
-        "review_body,"
-        "school)" + "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);"
-    cursor.execute(q_reviews, ('XXX','XXX','XXX','XXX','XXX','XXX','XXX','XXX','XXX','XXX','XXX','XXX','XXX','XXX','XXX','XXX','XXX','XXX','XXX','XXX'))
-    print()
+    row = (1,'nam','ano','host','2013-02-26 21:28:37','alm','tit','tag','bod','2013-02-26 21:28:37','2013-02-26 21:28:37','prog','user',1.1,'com','ov',1,1,'XXX','XXX')
+    #for row in reviews_df:
+    q_reviews = ("INSERT INTO competitive_landscape.reviews("
+    "id,"
+    "name,"
+    "anonymous,"
+    "hostProgramName,"
+    "graduatingYear,"
+    "isAlumni,"
+    "jobTitle,"
+    "tagline,"
+    "body,"
+    "createdAt,"
+    "queryDate,"
+    "program,"
+    "user,"
+    "overallScore,"
+    "comments,"
+    "overall,"
+    "curriculum,"
+    "jobSupport,"
+    "review_body,"
+    "school)" + " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);")
+    cursor.execute(q_reviews, row)
+    #print(q_reviews)
 
 def commit_sql(cursor, cnx):
     # Commits everything to SQL database and closes connections
