@@ -84,8 +84,8 @@ cursor, cnx = python_to_sql.connect_to_sql()
 # Create sql tables
 python_to_sql.create_sql_tables(cursor)
 
-# Commit and close SQL connection
-python_to_sql.commit_and_close_sql(cursor, cnx)
+# Commit SQL connection
+python_to_sql.commit_sql(cursor, cnx)
 
 
 # Move the data to dataframes
@@ -101,9 +101,18 @@ schools_df = pd.concat(schools_list)
 # Removing the . from the table location column names
 locations_df.rename(columns={col : col.replace('.','_') for col in locations_df.columns}, inplace=True)
 
+python_to_sql.print_to_sql_tables(cursor, reviews,locations,courses,badges,schools)
 
+<<<<<<< HEAD
 #print(reviews_df.head())
 print(locations_df.head())
 #print(courses_df.head())
 #print(badges_df.head())
 #print(schools_df.head())
+=======
+python_to_sql.commit_sql(cursor, cnx)
+
+python_to_sql.close_sql(cursor, cnx)
+
+#print(reviews.head(), locations.head(), courses.head(), badges.head(), schools.head())
+>>>>>>> 9e4c384cac19562b75633ec5f1e13d5a6f732557
