@@ -61,6 +61,14 @@ def get_school_info(school, school_id):
 
     return locations_df, courses_df, badges_df, school_df
 
+def table_to_sql(df, conn, table):
+    df.to_sql(table, conn, if_exists = 'replace', index = False)
+
+
+
+
+
+
 locations_list = []
 courses_list = []
 badges_list = []
