@@ -2,9 +2,9 @@
 
 
 schools = {
-'ironhack' : 10828,
-'app-academy' : 10525,
-'springboard' : 11035
+'ironhack' : 10828#,
+#'app-academy' : 10525,
+#'springboard' : 11035
 }
 
 import re
@@ -26,6 +26,7 @@ def get_comments_school(school):
   def remove_tags(x):
     return TAG_RE.sub('',x)
   reviews['review_body'] = reviews['body'].apply(remove_tags)
+  #reviews.drop(['body'])
   reviews['school'] = school
   return reviews
 
@@ -97,6 +98,16 @@ schools_df = pd.concat(schools_list)
 
 
 #DATA CLEANING
+#print(reviews_df['body'])
+print(reviews_df['createdAt'])
+print(reviews_df['queryDate'])
+print(reviews_df['review_body'])
+# print(reviews_df.columns)
+# print(reviews_df.index)
+# for row in reviews_df.index:
+#     print(row)
+#     print(reviews_df.iloc[row,0])
+
 
 # Removing the . from the table location column names
 locations_df.rename(columns={col : col.replace('.','_') for col in locations_df.columns}, inplace=True)

@@ -68,7 +68,7 @@ def create_sql_tables(cursor):
     "name VARCHAR(100),"
     "anonymous VARCHAR(100),"
     "hostProgramName VARCHAR(100),"
-    "graduatingYear Date,"
+    "graduatingYear INT,"
     "isAlumni VARCHAR(100),"
     "jobTitle VARCHAR(100),"
     "tagline VARCHAR(100),"
@@ -97,30 +97,51 @@ def print_to_sql_tables(cursor,reviews_df,locations_df,courses_df,badges_df,scho
     # Insert rows on tables from dataframes
     # Table Reviews
     q_reviews = ''
-    row = (1,'nam','ano','host','2013-02-26 21:28:37','alm','tit','tag','bod','2013-02-26 21:28:37','2013-02-26 21:28:37','prog','user',1.1,'com','ov',1,1,'XXX','XXX')
-    #for row in reviews_df:
-    q_reviews = ("INSERT INTO competitive_landscape.reviews("
-    "id,"
-    "name,"
-    "anonymous,"
-    "hostProgramName,"
-    "graduatingYear,"
-    "isAlumni,"
-    "jobTitle,"
-    "tagline,"
-    "body,"
-    "createdAt,"
-    "queryDate,"
-    "program,"
-    "user,"
-    "overallScore,"
-    "comments,"
-    "overall,"
-    "curriculum,"
-    "jobSupport,"
-    "review_body,"
-    "school)" + " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);")
-    cursor.execute(q_reviews, row)
+    for row in reviews_df.index:
+        values = (str(reviews_df.iloc[row,0]),
+        str(reviews_df.iloc[row,1]),
+        str(reviews_df.iloc[row,2]),
+        str(reviews_df.iloc[row,3]),
+        str(reviews_df.iloc[row,4]),
+        str(reviews_df.iloc[row,5]),
+        str(reviews_df.iloc[row,6]),
+        str(reviews_df.iloc[row,7]),
+        str(reviews_df.iloc[row,8]),
+        str(reviews_df.iloc[row,9]),
+        str(reviews_df.iloc[row,10]),
+        str(reviews_df.iloc[row,11]),
+        str(reviews_df.iloc[row,12]),
+        str(reviews_df.iloc[row,13]),
+        str(reviews_df.iloc[row,14]),
+        str(reviews_df.iloc[row,15]),
+        str(reviews_df.iloc[row,16]),
+        str(reviews_df.iloc[row,17]),
+        str(reviews_df.iloc[row,18]),
+        str(reviews_df.iloc[row,19]))
+        #print(reviews_df.iloc(0,row))
+        #for row in reviews_df:
+        q_reviews = ("INSERT INTO competitive_landscape.reviews("
+        "id,"
+        "name,"
+        "anonymous,"
+        "hostProgramName,"
+        "graduatingYear,"
+        "isAlumni,"
+        "jobTitle,"
+        "tagline,"
+        "body,"
+        "createdAt,"
+        "queryDate,"
+        "program,"
+        "user,"
+        "overallScore,"
+        "comments,"
+        "overall,"
+        "curriculum,"
+        "jobSupport,"
+        "review_body,"
+        "school)" + " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);")
+        cursor.execute(q_reviews, values)
     #print(q_reviews)
 
 def commit_sql(cursor, cnx):
