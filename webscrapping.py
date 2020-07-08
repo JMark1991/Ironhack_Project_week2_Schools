@@ -9,7 +9,7 @@ schools = {
 
 import re
 import pandas as pd
-from pandas.io.json import json_normalize
+#from pandas.io.json import json_normalize
 import requests
 import python_to_sql
 
@@ -67,6 +67,7 @@ courses_list = []
 badges_list = []
 schools_list = []
 
+
 for school, id in schools.items():
   print(school)
   a,b,c,d = get_school_info(school,id)
@@ -77,14 +78,6 @@ for school, id in schools.items():
   reviews_list.append(get_comments_school(school))
 
 
-# print(
-# '\n\nLocations: \n', locations_list[0].columns,
-# '\n\nCourses: \n', courses_list[0].columns,
-# '\n\nBadges: \n', badges_list[0].columns,
-# '\n\nSchools: \n', schools_list[0].columns,
-# '\n\nReviews: \n', reviews_list[0].columns
-#)
-
 # Connect to SQL database
 cursor, cnx = python_to_sql.connect_to_sql()
 
@@ -94,15 +87,12 @@ python_to_sql.create_sql_tables(cursor)
 # Commit and close SQL connection
 python_to_sql.commit_and_close_sql(cursor, cnx)
 
-# for n in range(3):
-#     print('NOVA ESCOLAAAAAAAAAAAAAAA')
-#     print('\n\n')
-#     print(schools_list[n])
-#     print('\n\n')
-#     print(reviews_list[n])
-#     print('\n\n')
-#     print(locations_list[n])
-#     print('\n\n')
-#     print(badges_list[n])
-#     print('\n\n')
-#     print(courses_list[n])
+
+reviews = pd.concat(reviews_list)
+locations = pd.concat(locations_list)
+courses = pd.concat(courses_list)
+badges = pd.concat(badges_list)
+schools = pd.concat(schools_list)
+
+
+print(reviews.head(), locations.head(), courses.head(), badges.head(), schools.head())
