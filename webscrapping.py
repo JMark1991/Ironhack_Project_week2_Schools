@@ -26,8 +26,9 @@ def get_comments_school(school):
   def remove_tags(x):
     return TAG_RE.sub('',x)
   reviews['review_body'] = reviews['body'].apply(remove_tags)
-  #reviews.drop(['body'])
   reviews['school'] = school
+  # Convert string column to datetype
+  reviews['createdAt'] = pd.to_datetime(reviews['createdAt'])
   return reviews
 
 
@@ -96,12 +97,18 @@ courses_df = pd.concat(courses_list)
 badges_df = pd.concat(badges_list)
 schools_df = pd.concat(schools_list)
 
+# Drop columns not needed from dataframes
+reviews_df = reviews_df.drop(['body'], axis=1)
+reviews_df = reviews_df.fillna(0)
 
 #DATA CLEANING
-#print(reviews_df['body'])
-print(reviews_df['createdAt'])
-print(reviews_df['queryDate'])
-print(reviews_df['review_body'])
+#print(reviews_df['jobSupport'])
+#print(reviews_df[pd.isna(reviews_df['jobSupport'])==True])
+#reviews_df['lenght'] = len(reviews_df['tagline'])
+#print(reviews_df['tagline'])
+#print(reviews_df['lenght'].max())
+#print(len(reviews_df['review_body'][0]))
+#print(reviews_df['tagline'])
 # print(reviews_df.columns)
 # print(reviews_df.index)
 # for row in reviews_df.index:

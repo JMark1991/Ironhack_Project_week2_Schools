@@ -71,8 +71,7 @@ def create_sql_tables(cursor):
     "graduatingYear INT,"
     "isAlumni VARCHAR(100),"
     "jobTitle VARCHAR(100),"
-    "tagline VARCHAR(100),"
-    "body VARCHAR(100),"
+    "tagline VARCHAR(1000),"
     "createdAt Date,"
     "queryDate Date,"
     "program VARCHAR(100),"
@@ -82,7 +81,7 @@ def create_sql_tables(cursor):
     "overall VARCHAR(100),"
     "curriculum INT,"
     "jobSupport INT,"
-    "review_body VARCHAR(100),"
+    "review_body VARCHAR(5000),"
     "school VARCHAR(100))")
 
     # Execute all tables to SQL database
@@ -97,6 +96,7 @@ def print_to_sql_tables(cursor,reviews_df,locations_df,courses_df,badges_df,scho
     # Insert rows on tables from dataframes
     # Table Reviews
     q_reviews = ''
+    list_dummy = []
     for row in reviews_df.index:
         values = (str(reviews_df.iloc[row,0]),
         str(reviews_df.iloc[row,1]),
@@ -116,8 +116,7 @@ def print_to_sql_tables(cursor,reviews_df,locations_df,courses_df,badges_df,scho
         str(reviews_df.iloc[row,15]),
         str(reviews_df.iloc[row,16]),
         str(reviews_df.iloc[row,17]),
-        str(reviews_df.iloc[row,18]),
-        str(reviews_df.iloc[row,19]))
+        str(reviews_df.iloc[row,18]))
         #print(reviews_df.iloc(0,row))
         #for row in reviews_df:
         q_reviews = ("INSERT INTO competitive_landscape.reviews("
@@ -129,7 +128,6 @@ def print_to_sql_tables(cursor,reviews_df,locations_df,courses_df,badges_df,scho
         "isAlumni,"
         "jobTitle,"
         "tagline,"
-        "body,"
         "createdAt,"
         "queryDate,"
         "program,"
@@ -140,9 +138,8 @@ def print_to_sql_tables(cursor,reviews_df,locations_df,courses_df,badges_df,scho
         "curriculum,"
         "jobSupport,"
         "review_body,"
-        "school)" + " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);")
+        "school)" + " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);")
         cursor.execute(q_reviews, values)
-    #print(q_reviews)
 
 def commit_sql(cursor, cnx):
     # Commits everything to SQL database and closes connections
