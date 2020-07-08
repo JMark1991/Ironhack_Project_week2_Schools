@@ -9,7 +9,7 @@ schools = {
 
 import re
 import pandas as pd
-#from pandas.io.json import json_normalize
+import numpy as np
 import requests
 import python_to_sql
 
@@ -27,8 +27,6 @@ def get_comments_school(school):
     return TAG_RE.sub('',x)
   reviews['review_body'] = reviews['body'].apply(remove_tags)
   reviews['school'] = school
-  # Convert string column to datetype
-  reviews['createdAt'] = pd.to_datetime(reviews['createdAt'])
   return reviews
 
 
@@ -97,11 +95,30 @@ courses_df = pd.concat(courses_list)
 badges_df = pd.concat(badges_list)
 schools_df = pd.concat(schools_list)
 
+
+#DATA CLEANING
+
 # Drop columns not needed from dataframes
 reviews_df = reviews_df.drop(['body'], axis=1)
 reviews_df = reviews_df.fillna(0)
 
-#DATA CLEANING
+# Convert string column to datetype
+reviews_df['createdAt'] = pd.to_datetime(reviews_df['createdAt'])
+
+# Removing the . from the table location column names
+locations_df.rename(columns={col : col.replace('.','_') for col in locations_df.columns}, inplace=True)
+
+
+
+python_to_sql.print_to_sql_tables(cursor, reviews_df, locations_df,courses_df, badges_df, schools_df)
+
+python_to_sql.commit_sql(cursor, cnx)
+
+python_to_sql.close_sql(cursor, cnx)
+
+print(reviews_df.head())
+
+
 #print(reviews_df['jobSupport'])
 #print(reviews_df[pd.isna(reviews_df['jobSupport'])==True])
 #reviews_df['lenght'] = len(reviews_df['tagline'])
@@ -114,15 +131,3 @@ reviews_df = reviews_df.fillna(0)
 # for row in reviews_df.index:
 #     print(row)
 #     print(reviews_df.iloc[row,0])
-
-
-# Removing the . from the table location column names
-locations_df.rename(columns={col : col.replace('.','_') for col in locations_df.columns}, inplace=True)
-
-python_to_sql.print_to_sql_tables(cursor, reviews_df, locations_df,courses_df, badges_df, schools_df)
-
-python_to_sql.commit_sql(cursor, cnx)
-
-python_to_sql.close_sql(cursor, cnx)
-
-print(reviews_df.head())

@@ -81,7 +81,7 @@ def create_sql_tables(cursor):
     "overall VARCHAR(100),"
     "curriculum INT,"
     "jobSupport INT,"
-    "review_body VARCHAR(5000),"
+    "review_body TEXT,"
     "school VARCHAR(100))")
 
     # Execute all tables to SQL database
