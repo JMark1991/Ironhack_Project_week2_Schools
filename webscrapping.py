@@ -9,8 +9,9 @@ schools = {
 
 import re
 import pandas as pd
+from pandas.io.json import json_normalize
 import requests
-
+import mysql.connector
 
 
 def get_comments_school(school):
@@ -41,7 +42,7 @@ def get_school_info(school, school_id):
     courses_df = pd.DataFrame(courses, columns= ['courses'])
 
     locations = data['content']['locations']
-    locations_df = pd.json_normalize(locations)
+    locations_df = json_normalize(locations)
 
     badges_df = pd.DataFrame(data['content']['meritBadges'])
 
@@ -63,10 +64,10 @@ def get_school_info(school, school_id):
 def table_to_sql(df, conn, table):
     df.to_sql(table, conn, if_exists = 'replace', index = False)
 
+password = input('Please write your localhost root password:\n')
+cnx = mysql.connector.connect(user = 'root',password = password, host ='localhost', database = 'competitive_landscape')
 
-
-
-
+print(cnx.is_connected())
 
 locations_list = []
 courses_list = []
@@ -80,4 +81,3 @@ for school, id in schools.items():
     courses_list.append(b)
     badges_list.append(c)
     schools_list.append(d)
-
