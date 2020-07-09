@@ -3,8 +3,8 @@
 
 schools = {
 'ironhack' : 10828,
-'app-academy' : 10525#,
-#'springboard' : 11035
+'app-academy' : 10525,
+'springboard' : 11035
 }
 
 import re
