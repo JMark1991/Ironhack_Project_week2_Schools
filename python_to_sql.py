@@ -47,7 +47,10 @@ def create_sql_tables(cursor):
     "state_name VARCHAR(100),"
     "state_abbrev VARCHAR(100),"
     "state_keyword VARCHAR(100),"
-    "school VARCHAR(100))")
+    "school VARCHAR(100),"
+    "CONSTRAINT FK_PersonOrder FOREIGN KEY (school)"
+    "REFERENCES schools (school))"
+    "ENGINE = InnoDB;")
 
     q_courses = ("CREATE TABLE IF NOT EXISTS "
     "courses ("
@@ -101,7 +104,7 @@ def create_sql_tables(cursor):
     cursor.execute(q_courses)
     #cursor.execute(q_alter_locations)
 
-def print_to_sql_tables(cursor, reviews_df, locations_df, courses_df, badges_df, schools_df):
+def print_to_sql_tables(cursor, reviews_df, locations_df, courses_df, badges_df, schools_df,cnx):
 
     # Insert rows on tables from dataframes
     # Table Reviews
@@ -139,7 +142,7 @@ def print_to_sql_tables(cursor, reviews_df, locations_df, courses_df, badges_df,
     schools_cols = {'website':'website', 'description':'description', 'LogoUrl':'LogoUrl', 'school':'school'}
 
 
-    def print_table_to_sql (df, cols, sql_db_name):
+    def print_table_to_sql (df, cols, sql_db_name,cnx):
         query = ''
         list_keys = list(cols.keys())
         for row in range(len(df.index)):
@@ -151,14 +154,16 @@ def print_to_sql_tables(cursor, reviews_df, locations_df, courses_df, badges_df,
             query += '%s,' * (len(list_keys) - 1) + '%s);'
             try:
                 cursor.execute(query, values)
+                cnx.commit()
             except mysql.connector.IntegrityError as err:
                 print("Error: {}".format(err))
 
-    print_table_to_sql(reviews_df, review_cols, "reviews")
-    print_table_to_sql(locations_df, locations_cols, "locations")
-    print_table_to_sql(courses_df, courses_cols, "courses")
-    print_table_to_sql(badges_df, badges_cols, "badges")
-    print_table_to_sql(schools_df, schools_cols, "schools")
+    print_table_to_sql(schools_df, schools_cols, "schools",cnx)
+    print_table_to_sql(locations_df, locations_cols, "locations",cnx)
+    print_table_to_sql(reviews_df, review_cols, "reviews",cnx)
+    print_table_to_sql(courses_df, courses_cols, "courses",cnx)
+    print_table_to_sql(badges_df, badges_cols, "badges",cnx)
+
 
 
 def commit_sql(cursor, cnx):

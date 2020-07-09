@@ -118,7 +118,7 @@ badges_df.index = np.arange(badges_df['school'].count())
 schools_df.index = schools_df['school']
 
 
-python_to_sql.print_to_sql_tables(cursor, reviews_df, locations_df,courses_df, badges_df, schools_df)
+python_to_sql.print_to_sql_tables(cursor, reviews_df, locations_df,courses_df, badges_df, schools_df,cnx)
 
 python_to_sql.commit_sql(cursor, cnx)
 
