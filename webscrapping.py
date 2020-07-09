@@ -103,6 +103,7 @@ schools_df = pd.concat(schools_list)
 reviews_df = reviews_df.drop(['body'], axis=1)
 reviews_df = reviews_df.fillna(0)
 reviews_df['createdAt'] = pd.to_datetime(reviews_df['createdAt'])
+reviews_df.drop(labels='user', axis=1,inplace=True)
 
 # Locations dataframe:
 # Removing the . from the table location column names, rename column id, remove nan
@@ -116,6 +117,7 @@ locations_df.index = locations_df['location_id']
 courses_df.index = np.arange(courses_df['school'].count())
 badges_df.index = np.arange(badges_df['school'].count())
 schools_df.index = schools_df['school']
+
 
 
 python_to_sql.print_to_sql_tables(cursor, reviews_df, locations_df,courses_df, badges_df, schools_df,cnx)
