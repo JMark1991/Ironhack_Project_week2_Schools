@@ -2,9 +2,19 @@
 
 
 schools = {
+<<<<<<< HEAD
 #'ironhack' : 10828,
 'app-academy' : 10525#,
 #'springboard' : 11035
+||||||| 1e81e92
+'ironhack' : 10828,
+'app-academy' : 10525,
+'springboard' : 11035
+=======
+#'ironhack' : 10828,
+#'app-academy' : 10525,
+'springboard' : 11035
+>>>>>>> 9c121a84d14c10c7e6d73006a13f51d1191d984b
 }
 
 import re

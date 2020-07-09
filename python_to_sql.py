@@ -43,7 +43,7 @@ def create_sql_tables(cursor):
     "city_id INT,"
     "city_name VARCHAR(100),"
     "city_keyword VARCHAR(100),"
-    "state_id INT,"
+    "state_id VARCHAR(100),"
     "state_name VARCHAR(100),"
     "state_abbrev VARCHAR(100),"
     "state_keyword VARCHAR(100),"
@@ -78,7 +78,7 @@ def create_sql_tables(cursor):
     "program VARCHAR(100),"
     "user VARCHAR(100),"
     "overallScore FLOAT,"
-    "comments VARCHAR(100),"
+    "comments TEXT,"
     "overall VARCHAR(100),"
     "curriculum INT,"
     "jobSupport INT,"
@@ -97,52 +97,54 @@ def print_to_sql_tables(cursor, reviews_df, locations_df, courses_df, badges_df,
     # Insert rows on tables from dataframes
     # Table Reviews
 
-    review_cols = ["id",
-        "name",
-        "anonymous",
-        "hostProgramName",
-        "graduatingYear",
-        "isAlumni",
-        "jobTitle",
-        "tagline",
-        "createdAt",
-        "queryDate",
-        "program",
-        "user",
-        "overallScore",
-        "comments",
-        "overall",
-        "curriculum",
-        "jobSupport",
-        "review_body",
-        "school"]
+    # {'sql_table_name' : 'dataframe_column_name'}
 
-    locations_cols = ['location_id', 'description', 'country_id', 'country_name', 'country_abbrev',
-       'city_id', 'city_name', 'city_keyword', 'state_id', 'state_name',
-       'state_abbrev', 'state_keyword', 'school']
+    review_cols = {"id":"id",
+        "name":"name",
+        "anonymous":"anonymous",
+        "hostProgramName":"hostProgramName",
+        "graduatingYear":"graduatingYear",
+        "isAlumni":"isAlumni",
+        "jobTitle":"jobTitle",
+        "tagline":"tagline",
+        "createdAt":"createdAt",
+        "queryDate":"queryDate",
+        "program":"program",
+        "user":"user",
+        "overallScore":"overallScore",
+        "comments":"comments",
+        "overall":"overall",
+        "curriculum":"curriculum",
+        "jobSupport":"jobSupport",
+        "review_body":"review_body",
+        "school":"school"}
 
-    courses_cols = ['courses', 'school']
+    locations_cols = {'location_id':'location_id', 'description':'description', 'country_id':'country_id', 'country_name':'country_name', 'country_abbrev':'country_abbrev',
+       'city_id':'city_id', 'city_name':'city_name', 'city_keyword':'city_keyword', 'state_id':'state_id', 'state_name':'state_name',
+       'state_abbrev':'state_abbrev', 'state_keyword':'state_keyword', 'school':'school'}
 
-    badges_cols = ['name', 'keyword', 'description', 'school']
+    courses_cols = {'courses':'courses', 'school':'school'}
 
-    schools_cols = ['website', 'description', 'LogoUrl', 'school']
+    badges_cols = {'name':'name', 'keyword':'keyword', 'description':'description', 'school':'school'}
+
+    schools_cols = {'website':'website', 'description':'description', 'LogoUrl':'LogoUrl', 'school':'school'}
 
 
     def print_table_to_sql (df, cols, sql_db_name):
         query = ''
-
+        list_keys = list(cols.keys())
         for row in df.index:
-            values = tuple(str(df.iloc[row,n]) for n in range(len(cols)))
+            values = tuple(str(df.iloc[row,n]) for n in range(len(list_keys)))
             query = "INSERT INTO competitive_landscape." + sql_db_name + " ("
-            for n in range(len(cols) - 1):
-                query += cols[n] + ", "
-            query += cols[-1] + ')  VALUES ('
-            query += '%s,' * (len(cols) - 1) + '%s);'
+            for n in range(len(list_keys) - 1):
+                query += list_keys[n] + ", "
+            query += list_keys[-1] + ')  VALUES ('
+            query += '%s,' * (len(list_keys) - 1) + '%s);'
 
             try:
                 cursor.execute(query, values)
             except mysql.connector.IntegrityError as err:
-                print("Error: {}".format(err))
+                print("Error: {}\t\t Row: {values}".format(err))
 
     print_table_to_sql(reviews_df, review_cols, "reviews")
     print_table_to_sql(locations_df, locations_cols, "locations")
