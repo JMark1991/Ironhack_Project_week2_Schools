@@ -36,7 +36,7 @@ def create_sql_tables(cursor):
 
     q_locations = ("CREATE TABLE IF NOT EXISTS "
     "locations ("
-    "id INT PRIMARY KEY,"
+    "location_id INT PRIMARY KEY,"
     "description VARCHAR(500),"
     "country_id INT,"
     "country_name VARCHAR(100),"
@@ -97,9 +97,8 @@ def print_to_sql_tables(cursor, reviews_df, locations_df, courses_df, badges_df,
 
     # Insert rows on tables from dataframes
     # Table Reviews
-    q_reviews = ''
-<<<<<<< HEAD
-    cols = ["id",
+    
+    review_cols = ["id",
         "name",
         "anonymous",
         "hostProgramName",
@@ -118,62 +117,42 @@ def print_to_sql_tables(cursor, reviews_df, locations_df, courses_df, badges_df,
         "jobSupport",
         "review_body",
         "school"]
-    for row in reviews_df.index:
-        values = tuple(str(reviews_df.iloc[row,n]) for n in range(len(cols)))
-        q_reviews = "INSERT INTO competitive_landscape.reviews ("
-        for n in range(len(cols) - 1):
-            q_reviews += cols[n] + ", "
-        q_reviews += cols[-1] + ')  VALUES ('
-        q_reviews += '%s,' * (len(cols) - 1) + '%s);'
-        cursor.execute(q_reviews, values)
-=======
-    for row in reviews_df.index:
-        values = (str(reviews_df.iloc[row,0]),
-        str(reviews_df.iloc[row,1]),
-        str(reviews_df.iloc[row,2]),
-        str(reviews_df.iloc[row,3]),
-        str(reviews_df.iloc[row,4]),
-        str(reviews_df.iloc[row,5]),
-        str(reviews_df.iloc[row,6]),
-        str(reviews_df.iloc[row,7]),
-        str(reviews_df.iloc[row,8]),
-        str(reviews_df.iloc[row,9]),
-        str(reviews_df.iloc[row,10]),
-        str(reviews_df.iloc[row,11]),
-        str(reviews_df.iloc[row,12]),
-        str(reviews_df.iloc[row,13]),
-        str(reviews_df.iloc[row,14]),
-        str(reviews_df.iloc[row,15]),
-        str(reviews_df.iloc[row,16]),
-        str(reviews_df.iloc[row,17]),
-        str(reviews_df.iloc[row,18]))
 
-        q_reviews = ("INSERT INTO competitive_landscape.reviews("
-        "id,"
-        "name,"
-        "anonymous,"
-        "hostProgramName,"
-        "graduatingYear,"
-        "isAlumni,"
-        "jobTitle,"
-        "tagline,"
-        "createdAt,"
-        "queryDate,"
-        "program,"
-        "user,"
-        "overallScore,"
-        "comments,"
-        "overall,"
-        "curriculum,"
-        "jobSupport,"
-        "review_body,"
-        "school)" + " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);")
-        try:
-            cursor.execute(q_reviews, values)
-        except mysql.connector.IntegrityError as err:
-            print("Error: {}".format(err))
+    locations_cols = ['location_id', 'description', 'country_id', 'country_name', 'country_abbrev',
+       'city_id', 'city_name', 'city_keyword', 'state_id', 'state_name',
+       'state_abbrev', 'state_keyword', 'school']
 
-    #Table schools
+    courses_cols = ['courses', 'school']
+
+    badges_cols = ['name', 'keyword', 'description', 'school']
+
+    schools_cols = ['website', 'description', 'LogoUrl', 'school']
+
+
+    def print_table_to_sql (df, cols, sql_db_name):
+        query = ''
+        for row in df.index:
+            values = tuple(str(df.iloc[row,n]) for n in range(len(cols)))
+            query = "INSERT INTO competitive_landscape." + sql_db_name + " ("
+            for n in range(len(cols) - 1):
+                query += cols[n] + ", "
+            query += cols[-1] + ')  VALUES ('
+            query += '%s,' * (len(cols) - 1) + '%s);'
+
+            try:
+                cursor.execute(query, values)
+            except mysql.connector.IntegrityError as err:
+                print("Error: {}".format(err))
+    
+    print_table_to_sql(reviews_df, review_cols, "reviews")
+    print_table_to_sql(locations_df, locations_cols, "locations")
+    print_table_to_sql(courses_df, courses_df, "courses")
+    print_table_to_sql(badges_df, badges_cols, "badges")
+    print_table_to_sql(schools_df, schools_cols, "schools")
+
+
+
+'''    #Table schools
     q_schools = ''
     for row in schools_df.index:
         values = (str(schools_df.iloc[row,0]),
@@ -187,11 +166,8 @@ def print_to_sql_tables(cursor, reviews_df, locations_df, courses_df, badges_df,
         "description,"
         "LogoUrl)" + " VALUES (%s, %s, %s, %s);")
         cursor.execute(q_schools, values)
+'''
 
-
-
-
->>>>>>> baf85eb0a14d54550a8bdf95a5c1ed7e9630f531
 
 def commit_sql(cursor, cnx):
     # Commits everything to SQL database and closes connections
