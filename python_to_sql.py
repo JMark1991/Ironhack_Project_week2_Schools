@@ -1,5 +1,7 @@
 import mysql.connector
 from getpass import getpass
+from django.db import IntegrityError
+from os import sys
 
 # SQL Python link code
 # Table to export table to database
@@ -28,7 +30,7 @@ def create_sql_tables(cursor):
     q_schools = ("CREATE TABLE IF NOT EXISTS "
     "schools ("
     "school VARCHAR(100) PRIMARY KEY,"
-    "website VARCHAR(100),"
+    "website VARCHAR(1000),"
     "description VARCHAR(100),"
     "LogoUrl VARCHAR(100))")
 
@@ -91,12 +93,11 @@ def create_sql_tables(cursor):
     cursor.execute(q_reviews)
     cursor.execute(q_courses)
 
-def print_to_sql_tables(cursor,reviews_df,locations_df,courses_df,badges_df,schools_df):
+def print_to_sql_tables(cursor, reviews_df, locations_df, courses_df, badges_df, schools_df):
 
     # Insert rows on tables from dataframes
     # Table Reviews
     q_reviews = ''
-    list_dummy = []
     for row in reviews_df.index:
         values = (str(reviews_df.iloc[row,0]),
         str(reviews_df.iloc[row,1]),
@@ -117,8 +118,7 @@ def print_to_sql_tables(cursor,reviews_df,locations_df,courses_df,badges_df,scho
         str(reviews_df.iloc[row,16]),
         str(reviews_df.iloc[row,17]),
         str(reviews_df.iloc[row,18]))
-        #print(reviews_df.iloc(0,row))
-        #for row in reviews_df:
+
         q_reviews = ("INSERT INTO competitive_landscape.reviews("
         "id,"
         "name,"
@@ -139,7 +139,29 @@ def print_to_sql_tables(cursor,reviews_df,locations_df,courses_df,badges_df,scho
         "jobSupport,"
         "review_body,"
         "school)" + " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);")
-        cursor.execute(q_reviews, values)
+        try:
+            cursor.execute(q_reviews, values)
+        except mysql.connector.IntegrityError as err:
+            print("Error: {}".format(err))
+
+    #Table schools
+    q_schools = ''
+    for row in schools_df.index:
+        values = (str(schools_df.iloc[row,0]),
+        str(schools_df.iloc[row,1]),
+        str(schools_df.iloc[row,2]),
+        str(schools_df.iloc[row,3]))
+
+        q_schools = ("INSERT INTO competitive_landscape.schools("
+        "school,"
+        "website,"
+        "description,"
+        "LogoUrl)" + " VALUES (%s, %s, %s, %s);")
+        cursor.execute(q_schools, values)
+
+
+
+
 
 def commit_sql(cursor, cnx):
     # Commits everything to SQL database and closes connections
