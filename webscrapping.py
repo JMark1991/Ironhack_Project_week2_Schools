@@ -98,16 +98,17 @@ schools_df = pd.concat(schools_list)
 
 #DATA CLEANING
 
-# Drop columns not needed from dataframes
+# Reviews dataframe:
+# Drop columns not neede, remove nan, convert date from string to datetype
 reviews_df = reviews_df.drop(['body'], axis=1)
 reviews_df = reviews_df.fillna(0)
-
-# Convert string column to datetype
 reviews_df['createdAt'] = pd.to_datetime(reviews_df['createdAt'])
 
+# Locations dataframe:
 # Removing the . from the table location column names
 locations_df.rename(columns={col : col.replace('.','_') for col in locations_df.columns}, inplace=True)
-
+locations_df.rename(columns={'id' : 'location_id'}, inplace=True)
+locations_df = locations_df.fillna(0)
 
 
 python_to_sql.print_to_sql_tables(cursor, reviews_df, locations_df,courses_df, badges_df, schools_df)

@@ -144,11 +144,11 @@ def print_to_sql_tables(cursor, reviews_df, locations_df, courses_df, badges_df,
             except mysql.connector.IntegrityError as err:
                 print("Error: {}".format(err))
     
-    print_table_to_sql(reviews_df, review_cols, "reviews")
+    #print_table_to_sql(reviews_df, review_cols, "reviews")
     print_table_to_sql(locations_df, locations_cols, "locations")
-    print_table_to_sql(courses_df, courses_df, "courses")
-    print_table_to_sql(badges_df, badges_cols, "badges")
-    print_table_to_sql(schools_df, schools_cols, "schools")
+    #print_table_to_sql(courses_df, courses_df, "courses") #<- index error
+    #print_table_to_sql(badges_df, badges_cols, "badges")
+    #print_table_to_sql(schools_df, schools_cols, "schools") # <- 
 
 
 
