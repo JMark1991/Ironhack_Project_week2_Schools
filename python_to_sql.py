@@ -1,5 +1,7 @@
 import mysql.connector
 from getpass import getpass
+from django.db import IntegrityError
+from os import sys
 
 # SQL Python link code
 # Table to export table to database
@@ -28,7 +30,7 @@ def create_sql_tables(cursor):
     q_schools = ("CREATE TABLE IF NOT EXISTS "
     "schools ("
     "school VARCHAR(100) PRIMARY KEY,"
-    "website VARCHAR(100),"
+    "website VARCHAR(1000),"
     "description VARCHAR(100),"
     "LogoUrl VARCHAR(100))")
 
@@ -91,11 +93,12 @@ def create_sql_tables(cursor):
     cursor.execute(q_reviews)
     cursor.execute(q_courses)
 
-def print_to_sql_tables(cursor,reviews_df,locations_df,courses_df,badges_df,schools_df):
+def print_to_sql_tables(cursor, reviews_df, locations_df, courses_df, badges_df, schools_df):
 
     # Insert rows on tables from dataframes
     # Table Reviews
     q_reviews = ''
+<<<<<<< HEAD
     cols = ["id",
         "name",
         "anonymous",
@@ -123,6 +126,72 @@ def print_to_sql_tables(cursor,reviews_df,locations_df,courses_df,badges_df,scho
         q_reviews += cols[-1] + ')  VALUES ('
         q_reviews += '%s,' * (len(cols) - 1) + '%s);'
         cursor.execute(q_reviews, values)
+=======
+    for row in reviews_df.index:
+        values = (str(reviews_df.iloc[row,0]),
+        str(reviews_df.iloc[row,1]),
+        str(reviews_df.iloc[row,2]),
+        str(reviews_df.iloc[row,3]),
+        str(reviews_df.iloc[row,4]),
+        str(reviews_df.iloc[row,5]),
+        str(reviews_df.iloc[row,6]),
+        str(reviews_df.iloc[row,7]),
+        str(reviews_df.iloc[row,8]),
+        str(reviews_df.iloc[row,9]),
+        str(reviews_df.iloc[row,10]),
+        str(reviews_df.iloc[row,11]),
+        str(reviews_df.iloc[row,12]),
+        str(reviews_df.iloc[row,13]),
+        str(reviews_df.iloc[row,14]),
+        str(reviews_df.iloc[row,15]),
+        str(reviews_df.iloc[row,16]),
+        str(reviews_df.iloc[row,17]),
+        str(reviews_df.iloc[row,18]))
+
+        q_reviews = ("INSERT INTO competitive_landscape.reviews("
+        "id,"
+        "name,"
+        "anonymous,"
+        "hostProgramName,"
+        "graduatingYear,"
+        "isAlumni,"
+        "jobTitle,"
+        "tagline,"
+        "createdAt,"
+        "queryDate,"
+        "program,"
+        "user,"
+        "overallScore,"
+        "comments,"
+        "overall,"
+        "curriculum,"
+        "jobSupport,"
+        "review_body,"
+        "school)" + " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);")
+        try:
+            cursor.execute(q_reviews, values)
+        except mysql.connector.IntegrityError as err:
+            print("Error: {}".format(err))
+
+    #Table schools
+    q_schools = ''
+    for row in schools_df.index:
+        values = (str(schools_df.iloc[row,0]),
+        str(schools_df.iloc[row,1]),
+        str(schools_df.iloc[row,2]),
+        str(schools_df.iloc[row,3]))
+
+        q_schools = ("INSERT INTO competitive_landscape.schools("
+        "school,"
+        "website,"
+        "description,"
+        "LogoUrl)" + " VALUES (%s, %s, %s, %s);")
+        cursor.execute(q_schools, values)
+
+
+
+
+>>>>>>> baf85eb0a14d54550a8bdf95a5c1ed7e9630f531
 
 def commit_sql(cursor, cnx):
     # Commits everything to SQL database and closes connections
