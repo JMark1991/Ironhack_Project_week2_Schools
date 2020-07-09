@@ -2,9 +2,9 @@
 
 
 schools = {
-'ironhack' : 10828,
-'app-academy' : 10525,
-'springboard' : 11035
+#'ironhack' : 10828,
+'app-academy' : 10525#,
+#'springboard' : 11035
 }
 
 import re
@@ -110,10 +110,11 @@ locations_df.rename(columns={col : col.replace('.','_') for col in locations_df.
 locations_df.rename(columns={'id' : 'location_id'}, inplace=True)
 locations_df = locations_df.fillna(0)
 
+print(locations_df.columns)
+print(locations_df['state_id'])
 
 python_to_sql.print_to_sql_tables(cursor, reviews_df, locations_df,courses_df, badges_df, schools_df)
 
 python_to_sql.commit_sql(cursor, cnx)
 
 python_to_sql.close_sql(cursor, cnx)
-
