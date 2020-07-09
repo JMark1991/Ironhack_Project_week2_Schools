@@ -48,7 +48,7 @@ def create_sql_tables(cursor):
     "state_abbrev VARCHAR(100),"
     "state_keyword VARCHAR(100),"
     "school VARCHAR(100),"
-    "CONSTRAINT FK_PersonOrder FOREIGN KEY (school)"
+    "CONSTRAINT locations_FK_1 FOREIGN KEY (school)"
     "REFERENCES schools (school))"
     "ENGINE = InnoDB;")
 
@@ -56,7 +56,10 @@ def create_sql_tables(cursor):
     "courses ("
     "courses VARCHAR(100),"
     "school VARCHAR(100),"
-    "PRIMARY KEY (courses, school))")
+    "PRIMARY KEY (courses, school),"
+    "CONSTRAINT courses_FK_1 FOREIGN KEY (school)"
+    "REFERENCES schools (school))"
+    "ENGINE = InnoDB;")
 
     q_badges = ("CREATE TABLE IF NOT EXISTS "
     "badges ("
@@ -64,7 +67,10 @@ def create_sql_tables(cursor):
     "keyword VARCHAR(100),"
     "PRIMARY KEY (school, keyword),"
     "name VARCHAR(100),"
-    "description VARCHAR(500))")
+    "description VARCHAR(500),"
+    "CONSTRAINT badges_FK_1 FOREIGN KEY (school)"
+    "REFERENCES schools (school))"
+    "ENGINE = InnoDB;")
 
     q_reviews = ("CREATE TABLE IF NOT EXISTS "
     "reviews ("
@@ -86,15 +92,10 @@ def create_sql_tables(cursor):
     "curriculum INT,"
     "jobSupport INT,"
     "review_body TEXT,"
-    "school VARCHAR(100))")
-    #"CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`school`) "
-    #"   REFERENCES `schools` (`school`) ON DELETE CASCADE) "
-    #"ENGINE=InnoDB")
-
-    #q_alter_locations = ("ALTER TABLE locations "
-    #"ADD (FOREIGN KEY (`school`) "
-    #"   REFERENCES `schools` (`school`) ON DELETE CASCADE);")
-
+    "school VARCHAR(100),"
+    "CONSTRAINT reviews_FK_1 FOREIGN KEY (school)"
+    "REFERENCES schools (school))"
+    "ENGINE = InnoDB;")
 
     # Execute all tables to SQL database
     cursor.execute(q_schools)
@@ -102,7 +103,6 @@ def create_sql_tables(cursor):
     cursor.execute(q_locations)
     cursor.execute(q_reviews)
     cursor.execute(q_courses)
-    #cursor.execute(q_alter_locations)
 
 def print_to_sql_tables(cursor, reviews_df, locations_df, courses_df, badges_df, schools_df,cnx):
 
