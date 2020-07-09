@@ -2,8 +2,8 @@
 
 
 schools = {
-'ironhack' : 10828,
-'app-academy' : 10525,
+#'ironhack' : 10828,
+#'app-academy' : 10525,
 'springboard' : 11035
 }
 
