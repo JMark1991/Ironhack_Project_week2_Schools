@@ -28,7 +28,7 @@ def connect_to_sql():
 def create_sql_tables(cursor):
     q_schools = ("CREATE TABLE IF NOT EXISTS "
     "schools ("
-    "school VARCHAR(100) PRIMARY KEY,"
+    "school VARCHAR(100) PRIMARY KEY ,"
     "website VARCHAR(1000),"
     "description TEXT,"
     "LogoUrl VARCHAR(100))")
@@ -84,6 +84,14 @@ def create_sql_tables(cursor):
     "jobSupport INT,"
     "review_body TEXT,"
     "school VARCHAR(100))")
+    #"CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`school`) "
+    #"   REFERENCES `schools` (`school`) ON DELETE CASCADE) "
+    #"ENGINE=InnoDB")
+
+    #q_alter_locations = ("ALTER TABLE locations "
+    #"ADD (FOREIGN KEY (`school`) "
+    #"   REFERENCES `schools` (`school`) ON DELETE CASCADE);")
+
 
     # Execute all tables to SQL database
     cursor.execute(q_schools)
@@ -91,6 +99,7 @@ def create_sql_tables(cursor):
     cursor.execute(q_locations)
     cursor.execute(q_reviews)
     cursor.execute(q_courses)
+    #cursor.execute(q_alter_locations)
 
 def print_to_sql_tables(cursor, reviews_df, locations_df, courses_df, badges_df, schools_df):
 
@@ -150,24 +159,6 @@ def print_to_sql_tables(cursor, reviews_df, locations_df, courses_df, badges_df,
     print_table_to_sql(courses_df, courses_cols, "courses")
     print_table_to_sql(badges_df, badges_cols, "badges")
     print_table_to_sql(schools_df, schools_cols, "schools")
-
-
-
-'''    #Table schools
-    q_schools = ''
-    for row in schools_df.index:
-        values = (str(schools_df.iloc[row,0]),
-        str(schools_df.iloc[row,1]),
-        str(schools_df.iloc[row,2]),
-        str(schools_df.iloc[row,3]))
-
-        q_schools = ("INSERT INTO competitive_landscape.schools("
-        "school,"
-        "website,"
-        "description,"
-        "LogoUrl)" + " VALUES (%s, %s, %s, %s);")
-        cursor.execute(q_schools, values)
-'''
 
 
 def commit_sql(cursor, cnx):
