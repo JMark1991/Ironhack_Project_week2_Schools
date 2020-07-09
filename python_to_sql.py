@@ -133,18 +133,17 @@ def print_to_sql_tables(cursor, reviews_df, locations_df, courses_df, badges_df,
     def print_table_to_sql (df, cols, sql_db_name):
         query = ''
         list_keys = list(cols.keys())
-        for row in df.index:
-            values = tuple(str(df.iloc[row,n]) for n in range(len(list_keys)))
+        for row in range(len(df.index)):
+            values = tuple(str(df.iloc[row, n]) for n in range(len(list_keys)))
             query = "INSERT INTO competitive_landscape." + sql_db_name + " ("
             for n in range(len(list_keys) - 1):
                 query += list_keys[n] + ", "
             query += list_keys[-1] + ')  VALUES ('
             query += '%s,' * (len(list_keys) - 1) + '%s);'
-
             try:
                 cursor.execute(query, values)
             except mysql.connector.IntegrityError as err:
-                print("Error: {}\t\t Row: {values}".format(err))
+                print("Error: {}".format(err))
 
     print_table_to_sql(reviews_df, review_cols, "reviews")
     print_table_to_sql(locations_df, locations_cols, "locations")

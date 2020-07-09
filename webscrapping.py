@@ -110,8 +110,13 @@ locations_df.rename(columns={col : col.replace('.','_') for col in locations_df.
 locations_df.rename(columns={'id' : 'location_id'}, inplace=True)
 locations_df = locations_df.fillna(0)
 
-print(locations_df.columns)
-print(locations_df['state_id'])
+# Indexation
+reviews_df.index = reviews_df['id']
+locations_df.index = locations_df['location_id']
+courses_df.index = np.arange(courses_df['school'].count())
+badges_df.index = np.arange(badges_df['school'].count())
+schools_df.index = schools_df['school']
+
 
 python_to_sql.print_to_sql_tables(cursor, reviews_df, locations_df,courses_df, badges_df, schools_df)
 
