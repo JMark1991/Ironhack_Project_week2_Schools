@@ -131,7 +131,7 @@ def print_to_sql_tables(cursor, reviews_df, locations_df, courses_df, badges_df,
 
     def print_table_to_sql (df, cols, sql_db_name):
         query = ''
-        print(sql_db_name)
+        
         for row in df.index:
             values = tuple(str(df.iloc[row,n]) for n in range(len(cols)))
             query = "INSERT INTO competitive_landscape." + sql_db_name + " ("

@@ -2,9 +2,9 @@
 
 
 schools = {
-'ironhack' : 10828#,
-#'app-academy' : 10525,
-#'springboard' : 11035
+'ironhack' : 10828,
+'app-academy' : 10525,
+'springboard' : 11035
 }
 
 import re
@@ -117,18 +117,3 @@ python_to_sql.commit_sql(cursor, cnx)
 
 python_to_sql.close_sql(cursor, cnx)
 
-print(reviews_df.head())
-
-
-#print(reviews_df['jobSupport'])
-#print(reviews_df[pd.isna(reviews_df['jobSupport'])==True])
-#reviews_df['lenght'] = len(reviews_df['tagline'])
-#print(reviews_df['tagline'])
-#print(reviews_df['lenght'].max())
-#print(len(reviews_df['review_body'][0]))
-#print(reviews_df['tagline'])
-# print(reviews_df.columns)
-# print(reviews_df.index)
-# for row in reviews_df.index:
-#     print(row)
-#     print(reviews_df.iloc[row,0])
