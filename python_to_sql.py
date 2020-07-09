@@ -31,7 +31,7 @@ def create_sql_tables(cursor):
     "schools ("
     "school VARCHAR(100) PRIMARY KEY,"
     "website VARCHAR(1000),"
-    "description VARCHAR(100),"
+    "description TEXT,"
     "LogoUrl VARCHAR(100))")
 
     q_locations = ("CREATE TABLE IF NOT EXISTS "
@@ -97,7 +97,7 @@ def print_to_sql_tables(cursor, reviews_df, locations_df, courses_df, badges_df,
 
     # Insert rows on tables from dataframes
     # Table Reviews
-    
+
     review_cols = ["id",
         "name",
         "anonymous",
@@ -131,6 +131,7 @@ def print_to_sql_tables(cursor, reviews_df, locations_df, courses_df, badges_df,
 
     def print_table_to_sql (df, cols, sql_db_name):
         query = ''
+        print(sql_db_name)
         for row in df.index:
             values = tuple(str(df.iloc[row,n]) for n in range(len(cols)))
             query = "INSERT INTO competitive_landscape." + sql_db_name + " ("
@@ -143,12 +144,12 @@ def print_to_sql_tables(cursor, reviews_df, locations_df, courses_df, badges_df,
                 cursor.execute(query, values)
             except mysql.connector.IntegrityError as err:
                 print("Error: {}".format(err))
-    
-    #print_table_to_sql(reviews_df, review_cols, "reviews")
+
+    print_table_to_sql(reviews_df, review_cols, "reviews")
     print_table_to_sql(locations_df, locations_cols, "locations")
-    #print_table_to_sql(courses_df, courses_df, "courses") #<- index error
-    #print_table_to_sql(badges_df, badges_cols, "badges")
-    #print_table_to_sql(schools_df, schools_cols, "schools") # <- 
+    print_table_to_sql(courses_df, courses_cols, "courses")
+    print_table_to_sql(badges_df, badges_cols, "badges")
+    print_table_to_sql(schools_df, schools_cols, "schools")
 
 
 
