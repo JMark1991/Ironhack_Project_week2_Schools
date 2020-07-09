@@ -1,6 +1,7 @@
 import mysql.connector
 from getpass import getpass
 from os import sys
+import datetime
 
 # SQL Python link code
 # Table to export table to database
@@ -31,7 +32,8 @@ def create_sql_tables(cursor):
     "school VARCHAR(100) PRIMARY KEY ,"
     "website VARCHAR(1000),"
     "description TEXT,"
-    "LogoUrl VARCHAR(100))")
+    "LogoUrl VARCHAR(100),"
+    "LastUpdated Date)")
 
     q_locations = ("CREATE TABLE IF NOT EXISTS "
     "locations ("
@@ -48,8 +50,9 @@ def create_sql_tables(cursor):
     "state_abbrev VARCHAR(100),"
     "state_keyword VARCHAR(100),"
     "school VARCHAR(100),"
-    "CONSTRAINT locations_FK_1 FOREIGN KEY (school)"
-    "REFERENCES schools (school))"
+    "LastUpdated Date, "
+    "CONSTRAINT locations_FK_1 FOREIGN KEY (school) "
+    "REFERENCES schools (school)) "
     "ENGINE = InnoDB;")
 
     q_courses = ("CREATE TABLE IF NOT EXISTS "
@@ -57,6 +60,7 @@ def create_sql_tables(cursor):
     "courses VARCHAR(100),"
     "school VARCHAR(100),"
     "PRIMARY KEY (courses, school),"
+    "LastUpdated Date, "
     "CONSTRAINT courses_FK_1 FOREIGN KEY (school)"
     "REFERENCES schools (school))"
     "ENGINE = InnoDB;")
@@ -68,8 +72,9 @@ def create_sql_tables(cursor):
     "PRIMARY KEY (school, keyword),"
     "name VARCHAR(100),"
     "description VARCHAR(500),"
-    "CONSTRAINT badges_FK_1 FOREIGN KEY (school)"
-    "REFERENCES schools (school))"
+    "LastUpdated Date, "
+    "CONSTRAINT badges_FK_1 FOREIGN KEY (school) "
+    "REFERENCES schools (school)) "
     "ENGINE = InnoDB;")
 
     q_reviews = ("CREATE TABLE IF NOT EXISTS "
@@ -85,15 +90,15 @@ def create_sql_tables(cursor):
     "createdAt Date,"
     "queryDate Date,"
     "program VARCHAR(100),"
-    "user VARCHAR(100),"
-    "overallScore FLOAT,"
+    "overallScore VARCHAR(100),"
     "comments TEXT,"
     "overall VARCHAR(100),"
     "curriculum INT,"
     "jobSupport INT,"
     "review_body TEXT,"
     "school VARCHAR(100),"
-    "CONSTRAINT reviews_FK_1 FOREIGN KEY (school)"
+    "LastUpdated Date, "
+    "CONSTRAINT reviews_FK_1 FOREIGN KEY (school) "
     "REFERENCES schools (school))"
     "ENGINE = InnoDB;")
 
@@ -122,7 +127,6 @@ def print_to_sql_tables(cursor, reviews_df, locations_df, courses_df, badges_df,
         "createdAt":"createdAt",
         "queryDate":"queryDate",
         "program":"program",
-        "user":"user",
         "overallScore":"overallScore",
         "comments":"comments",
         "overall":"overall",
@@ -146,12 +150,13 @@ def print_to_sql_tables(cursor, reviews_df, locations_df, courses_df, badges_df,
         query = ''
         list_keys = list(cols.keys())
         for row in range(len(df.index)):
-            values = tuple(str(df.iloc[row, n]) for n in range(len(list_keys)))
+            values = list(str(df.iloc[row, n]) for n in range(len(list_keys)))
+            values = tuple(values + [datetime.datetime.now()])
             query = "INSERT INTO competitive_landscape." + sql_db_name + " ("
-            for n in range(len(list_keys) - 1):
+            for n in range(len(list_keys)):
                 query += list_keys[n] + ", "
-            query += list_keys[-1] + ')  VALUES ('
-            query += '%s,' * (len(list_keys) - 1) + '%s);'
+            query += 'LastUpdated' + ')  VALUES ('
+            query += '%s,' * (len(list_keys)) + '%s);'
             try:
                 cursor.execute(query, values)
                 cnx.commit()
